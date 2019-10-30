@@ -1,0 +1,33 @@
+{
+  "name": "narrator",
+  "version": "1.0.0",
+  "description": "Tell stories in the social networks",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "narrator",
+    "storytelling",
+    "social",
+    "network"
+  ],
+  "author": "seykron <seykron@rlab.be>",
+  "license": "GPL-2.0",
+  "devDependencies": {
+    "@types/node": "^12.11.7",
+    "@typescript-eslint/parser": "^2.5.0",
+    "eslint": "^6.6.0",
+    "ts-node": "^8.4.1",
+    "typescript": "^3.6.4"
+  },
+  "dependencies": {
+    "knex": "^0.20.0",
+    "lodash": "^4.17.15",
+    "mysql2": "^2.0.0",
+    "objection": "^1.6.11",
+    "objection-guid": "^3.0.2",
+    "uuid": "^3.3.3"
+  },
+  "typings": ""
+}
