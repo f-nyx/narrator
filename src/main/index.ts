@@ -1,7 +1,9 @@
-import {dataSource} from "./config/ApplicationContext"
+import {dataSource, webApplication} from "./config/ApplicationContext"
 
 async function main() {
     await dataSource.initialize()
+    webApplication.configure()
+    webApplication.start()
 }
 
 main()

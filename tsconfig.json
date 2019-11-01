@@ -5,7 +5,7 @@
     "sourceMap": true,
     "outDir": "target"
   },
-  "include": ["src/**/*", "test/**/*"],
+  "include": ["src/main/**/*", "src/test/**/*"],
   "exclude": [
     "node_modules"
   ]

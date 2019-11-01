@@ -1,4 +1,5 @@
-import {createNamespace} from "cls-hooked"
+import {createNamespace, Namespace} from "cls-hooked"
+
 import {Transaction} from "knex"
 import {dataSource} from "../../config/ApplicationContext"
 
@@ -15,7 +16,7 @@ const CURRENT_TRANSACTION: string = "TransactionManager::currentTransaction"
 export default class TransactionManager {
 
     /** Contains the transaction providers for active async contexts. */
-    private readonly transactionsProviders = createNamespace(NS_NAME)
+    private readonly transactionsProviders: Namespace = createNamespace(NS_NAME)
 
     /** Returns the active transaction for the current async context.
      * @return a promise to the active transaction.

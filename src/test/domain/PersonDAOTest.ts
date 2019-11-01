@@ -1,6 +1,6 @@
 import * as assert from "assert"
-import {personDAO} from "../../src/config/ApplicationContext"
-import Person from "../../src/domain/model/Person"
+import {personDAO} from "../../main/config/ApplicationContext"
+import Person from "../../main/domain/model/Person"
 import {runInTransaction} from "../support/TestTransactionSupport"
 
 describe("PersonDAO", function() {

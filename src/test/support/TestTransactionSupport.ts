@@ -1,5 +1,5 @@
-import {dataSource, transactionManager} from "../../src/config/ApplicationContext"
-import {database} from "../../src/config/knexfile"
+import {dataSource, transactionManager} from "../../main/config/ApplicationContext"
+import {database} from "../../main/config/knexfile"
 
 before(async function() {
     database.pool.min = 1

@@ -1,7 +1,7 @@
 import * as assert from "assert"
-import {bookDAO, personDAO} from "../../src/config/ApplicationContext"
-import Book from "../../src/domain/model/Book"
-import Person from "../../src/domain/model/Person"
+import {bookDAO, personDAO} from "../../main/config/ApplicationContext"
+import Book from "../../main/domain/model/Book"
+import Person from "../../main/domain/model/Person"
 import {runInTransaction} from "../support/TestTransactionSupport"
 
 describe("BookDAO", function() {
