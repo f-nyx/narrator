@@ -1,3 +1,4 @@
+import {transactionManager} from "../config/ApplicationContext"
 import Person from "./model/Person"
 import PersonModel from "./persistence/PersonModel"
 
@@ -10,7 +11,7 @@ export default class PersonDAO {
 
     async findById(id: string): Promise<Person> {
         let personModel = await PersonModel
-            .query()
+            .query(await transactionManager.current())
             .findById(id)
             .first()
         return Person.from(personModel.toJSON())

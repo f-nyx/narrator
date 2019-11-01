@@ -17,6 +17,13 @@ export default class BookModel extends BaseModel {
         }
     }
 
+    protected update(entity: Entity): BaseModel {
+        let book: Book = entity as Book
+        return Object.assign(this, {
+            title: book.title
+        })
+    }
+
     static get tableName(): string {
         return "books"
     }

@@ -1,7 +1,6 @@
 /** Represents a database entity.
+ * Domain entities must implement this interface.
  */
-import {Model} from "objection"
-
 export default interface Entity {
     /** Entity id. */
     readonly id: string

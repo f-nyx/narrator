@@ -1,5 +1,5 @@
-import {Config} from "knex"
 import * as Knex from "knex"
+import {Config} from "knex"
 import {Model} from "objection"
 import BookModel from "../domain/persistence/BookModel"
 import PersonModel from "../domain/persistence/PersonModel"
@@ -18,13 +18,13 @@ export default class DataSource {
     /** Creates a new data source and sets the connection configuration.
      * @param config Knex configuration.
      */
-    constructor(private readonly config: Config) { }
+    constructor(protected readonly config: Config) { }
 
     /** Initializes Knex, Objective, and create missing tables from
      * application models.
      */
-    async initialize() {
-        this.knex = Knex(this.config)
+    async initialize(config?: Config) {
+        this.knex = Knex(config || this.config)
         Model.knex(this.knex)
 
         for (let createTableIfRequired of this.createTableFunctions) {
@@ -36,5 +36,9 @@ export default class DataSource {
      */
     async destroy() {
         await this.knex.destroy()
+    }
+
+    transactionProvider(): () => Promise<Knex.Transaction> {
+        return this.knex.transactionProvider()
     }
 }

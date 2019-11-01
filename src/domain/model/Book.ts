@@ -39,4 +39,12 @@ export default class Book implements Entity {
     ): Book {
         return new Book(uuid(), title, author)
     }
+
+    /** Updates the book title.
+     * @param title New title.
+     * @return A book with the new title.
+     */
+    updateTitle(title: string): Book {
+        return new Book(this.id, title, this.author)
+    }
 }

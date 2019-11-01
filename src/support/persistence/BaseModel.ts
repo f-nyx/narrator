@@ -1,5 +1,6 @@
 import {ColumnNameMappers, compose, Model, snakeCaseMappers} from "objection"
 import * as guid from "objection-guid"
+import {transactionManager} from "../../config/ApplicationContext"
 import Entity from "./BaseEntity"
 
 const Plugins = compose([
@@ -70,14 +71,15 @@ export default class BaseModel extends Plugins(Model) {
      * @return the processed entity.
      */
     static async saveOrUpdate<T extends Entity>(entity: T): Promise<T> {
-        let existingEntity: BaseModel = await this.query()
+        let trx = await transactionManager.current()
+        let existingEntity: BaseModel = await this.query(trx)
             .findById(entity.id)
             .first()
 
         if (existingEntity) {
-            await this.query().update(existingEntity.update(entity))
+            await this.query(trx).update(existingEntity.update(entity))
         } else {
-            await this.query().insert(this.create(entity))
+            await this.query(trx).insert(this.create(entity))
         }
 
         return entity

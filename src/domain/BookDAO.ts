@@ -1,3 +1,4 @@
+import {transactionManager} from "../config/ApplicationContext"
 import Book from "./model/Book"
 import BookModel from "./persistence/BookModel"
 
@@ -10,7 +11,7 @@ export default class BookDAO {
 
     async findById(id: string): Promise<Book> {
         let bookModel = await BookModel
-            .query()
+            .query(await transactionManager.current())
             .findById(id)
             .joinEager("author")
             .first()
