@@ -6,8 +6,6 @@ async function main() {
     webApplication.start()
 }
 
-main()
-    .then(() => dataSource.destroy())
-    .catch(err => {
-        console.error(err);
-    });
+main().catch(err => {
+    console.error(err);
+})

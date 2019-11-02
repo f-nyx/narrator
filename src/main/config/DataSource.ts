@@ -1,8 +1,11 @@
 import * as Knex from "knex"
 import {Config} from "knex"
+import * as debugFactory from "debug"
 import {Model} from "objection"
 import BookModel from "../domain/persistence/BookModel"
 import PersonModel from "../domain/persistence/PersonModel"
+
+const debug = debugFactory("dataSource")
 
 /** Manages the data source lifecycle.
  */
@@ -24,8 +27,11 @@ export default class DataSource {
      * application models.
      */
     async initialize(config?: Config) {
+        debug("initializing knex")
         this.knex = Knex(config || this.config)
         Model.knex(this.knex)
+
+        debug("creating tables if required")
 
         for (let createTableIfRequired of this.createTableFunctions) {
             await createTableIfRequired()
@@ -35,6 +41,7 @@ export default class DataSource {
     /** Shut downs data source.
      */
     async destroy() {
+        debug("destroying data source")
         await this.knex.destroy()
     }
 

@@ -2,6 +2,9 @@ import {ColumnNameMappers, compose, Model, snakeCaseMappers} from "objection"
 import * as guid from "objection-guid"
 import {transactionManager} from "../../config/ApplicationContext"
 import Entity from "./BaseEntity"
+import * as debugFactory from "debug"
+
+const debug = debugFactory("dataSource")
 
 const Plugins = compose([
     guid()
@@ -34,7 +37,10 @@ export default class BaseModel extends Plugins(Model) {
         let exists = await this.knex().schema.hasTable(this.tableName)
 
         if (!exists) {
+            debug(`table ${this.tableName} does not exist, creating`)
             await this.createTable(this.knex())
+        } else {
+            debug(`table ${this.tableName} already exist`)
         }
     }
 
@@ -77,8 +83,10 @@ export default class BaseModel extends Plugins(Model) {
             .first()
 
         if (existingEntity) {
+            debug(`updating entity with id ${entity.id}`)
             await this.query(trx).update(existingEntity.update(entity))
         } else {
+            debug(`creating entity with id ${entity.id}`)
             await this.query(trx).insert(this.create(entity))
         }
 
