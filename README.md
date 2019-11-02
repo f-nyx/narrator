@@ -74,3 +74,19 @@ that uses different strategies provided by Node for this purpose. The
 uses *cls-hooked* to begin a transaction and keep it among the asynchronous call chain. The
 [TransactionMiddleware](https://github.com/f-nyx/narrator/blob/master/src/main/application/TransactionMiddleware.ts)
 hooks all requests to implement the transaction-per-request pattern.
+
+### Application context
+
+It is a good practice to wire components in a single place. The
+[ApplicationContext](https://github.com/f-nyx/narrator/blob/master/src/main/config/ApplicationContext.ts) class has
+this purpose. Instead of importing single components, classes that depend on other classes import the *instance*.
+Additionally it has a semantic benefit: the full application can be mapped in the same place.
+
+Finally to put it all together, the application
+[entry point](https://github.com/f-nyx/narrator/blob/master/src/main/index.ts) has only two responsibilities:
+to initialize the [DataSource](https://github.com/f-nyx/narrator/blob/master/src/main/config/DataSource.ts) and
+to start the [WebApplication](https://github.com/f-nyx/narrator/blob/master/src/main/config/WebApplication.ts).
+
+### TODO
+
+* Configuration by environment
