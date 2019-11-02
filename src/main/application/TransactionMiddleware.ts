@@ -8,15 +8,19 @@ import {transactionManager} from "../config/ApplicationContext"
  */
 export default class TransactionMiddleware {
     static install(): (Request, Response, NextFunction) => any {
-        return (req: Request, res: Response, next: NextFunction) =>
-            transactionManager.beginTransaction(async function() {
-                try {
-                    next()
-                    await transactionManager.commit()
-                } catch(cause) {
-                    await transactionManager.rollback()
-                    throw cause
-                }
-            })
+        return async (req: Request, res: Response, next: NextFunction) => {
+            try {
+                await transactionManager.beginTransaction(function () {
+                    try {
+                        next()
+                        transactionManager.commit()
+                    } catch (cause) {
+                        transactionManager.rollback()
+                    }
+                })
+            } catch (cause) {
+                res.status(500).send(cause.message)
+            }
+        }
     }
 }

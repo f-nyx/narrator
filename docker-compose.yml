@@ -1,0 +1,14 @@
+version: '3'
+services:
+  mariadb:
+    image: "mariadb:10.4"
+    restart: unless-stopped
+    environment:
+      - MYSQL_ROOT_PASSWORD
+      - MYSQL_DATABASE
+      - MYSQL_USER
+      - MYSQL_PASSWORD
+    volumes:
+      - ./.mariadb-dev:/var/lib/mysql
+    ports:
+      - 3306:3306

@@ -18,14 +18,13 @@ after(async function() {
  * @param callback Test implementation.
  */
 export const runInTransaction = function<T>(callback: () => Promise<T>): (Function) => any {
-    return (done) => {
-        transactionManager.beginTransaction(async function() {
+    return async () => {
+        await transactionManager.beginTransaction(async function() {
             try {
                 await callback()
-                done()
             } catch(cause) {
                 console.error(cause)
-                done(cause)
+                throw cause
             } finally {
                 await transactionManager.rollback()
             }

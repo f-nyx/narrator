@@ -10,8 +10,7 @@ export default class WebApplication {
     configure() {
         this.app.use("/static", express.static(path.join(__dirname, "../../web/public")))
         this.app.use(TransactionMiddleware.install())
-
-        initRoutes()
+        initRoutes(this.app)
     }
 
     start() {

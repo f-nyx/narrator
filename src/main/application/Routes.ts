@@ -1,5 +1,6 @@
-import {homeController, webApplication} from "../config/ApplicationContext"
+import {homeController} from "../config/ApplicationContext"
+import {Express} from "express"
 
-export default function initRoutes() {
-    webApplication.app.get("/", homeController.index)
+export default function initRoutes(app: Express) {
+    app.get("/", homeController.index)
 }

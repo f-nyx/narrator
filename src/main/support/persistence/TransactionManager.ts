@@ -16,15 +16,14 @@ const CURRENT_TRANSACTION: string = "TransactionManager::currentTransaction"
 export default class TransactionManager {
 
     /** Contains the transaction providers for active async contexts. */
-    private readonly transactionsProviders: Namespace = createNamespace(NS_NAME)
+    private readonly transactions: Namespace = createNamespace(NS_NAME)
 
     /** Returns the active transaction for the current async context.
      * @return a promise to the active transaction.
      */
-    async current(): Promise<Transaction<any, any>> {
+    current(): Transaction<any, any> {
         if (this.hasTransaction) {
-            let transactionProvider = this.transactionsProviders.get(CURRENT_TRANSACTION)
-            return await transactionProvider()
+            return this.transactions.get(CURRENT_TRANSACTION)
         } else {
             throw new Error("No active transaction in context")
         }
@@ -34,8 +33,8 @@ export default class TransactionManager {
      * @return true if there's an active transaction, false otherwise.
      */
     get hasTransaction(): boolean {
-        if (this.transactionsProviders && this.transactionsProviders.active) {
-            return this.transactionsProviders.get(CURRENT_TRANSACTION) != undefined
+        if (this.transactions && this.transactions.active) {
+            return this.transactions.get(CURRENT_TRANSACTION) != undefined
         } else {
             return false
         }
@@ -46,11 +45,12 @@ export default class TransactionManager {
      *
      * @param callback Callback to invoke once the transaction is created.
      */
-    beginTransaction(callback: () => void) {
-        this.transactionsProviders.run(() => {
+    async beginTransaction(callback: () => void) {
+        await this.transactions.runPromise(async () => {
             if (!this.hasTransaction) {
                 let transactionProvider = dataSource.transactionProvider()
-                this.transactionsProviders.set(CURRENT_TRANSACTION, transactionProvider)
+                let trx = await transactionProvider()
+                this.transactions.set(CURRENT_TRANSACTION, trx)
             }
             return callback()
         })
@@ -58,17 +58,17 @@ export default class TransactionManager {
 
     /** Commits the current transaction. Once committed, the transaction is no longer valid.
      */
-    async commit() {
-        let trx = await this.current()
+    commit() {
+        let trx = this.current()
         trx.commit()
-        this.transactionsProviders.set(CURRENT_TRANSACTION, null)
+        this.transactions.set(CURRENT_TRANSACTION, null)
     }
 
     /** Rollbacks the current transaction.
      */
-    async rollback() {
-        let trx = await this.current()
+    rollback() {
+        let trx = this.current()
         trx.rollback()
-        this.transactionsProviders.set(CURRENT_TRANSACTION, null)
+        this.transactions.set(CURRENT_TRANSACTION, null)
     }
 }
