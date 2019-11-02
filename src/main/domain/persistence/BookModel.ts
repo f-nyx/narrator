@@ -1,5 +1,5 @@
 import * as Knex from "knex"
-import Entity from "../../support/persistence/BaseEntity"
+import Entity from "../../support/persistence/Entity"
 import BaseModel from "../../support/persistence/BaseModel"
 import Book from "../model/Book"
 import PersonModel from "./PersonModel"

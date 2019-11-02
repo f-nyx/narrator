@@ -1,4 +1,4 @@
-import Entity from "../../support/persistence/BaseEntity"
+import Entity from "../../support/persistence/Entity"
 import Person from "./Person"
 import * as uuid from "uuid/v4"
 

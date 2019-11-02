@@ -1,7 +1,7 @@
 import {ColumnNameMappers, compose, Model, snakeCaseMappers} from "objection"
 import * as guid from "objection-guid"
 import {transactionManager} from "../../config/ApplicationContext"
-import Entity from "./BaseEntity"
+import Entity from "./Entity"
 import * as debugFactory from "debug"
 
 const debug = debugFactory("dataSource")
