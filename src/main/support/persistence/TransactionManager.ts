@@ -1,7 +1,10 @@
 import {createNamespace, Namespace} from "cls-hooked"
-
 import {Transaction} from "knex"
-import {dataSource} from "../../config/ApplicationContext"
+import * as debugFactory from "debug"
+import * as uuid from "uuid/v4"
+import DataSource from "../../config/DataSource"
+
+const debug = debugFactory("transactions")
 
 const NS_NAME: string = "TransactionManager::transactions"
 const CURRENT_TRANSACTION: string = "TransactionManager::currentTransaction"
@@ -15,6 +18,8 @@ const CURRENT_TRANSACTION: string = "TransactionManager::currentTransaction"
  */
 export default class TransactionManager {
 
+    constructor(private readonly dataSource: DataSource) { }
+
     /** Contains the transaction providers for active async contexts. */
     private readonly transactions: Namespace = createNamespace(NS_NAME)
 
@@ -23,7 +28,9 @@ export default class TransactionManager {
      */
     current(): Transaction<any, any> {
         if (this.hasTransaction) {
-            return this.transactions.get(CURRENT_TRANSACTION)
+            let wrapper = this.transactions.get(CURRENT_TRANSACTION)
+            debug("using transaction ", wrapper.id)
+            return wrapper.trx
         } else {
             throw new Error("No active transaction in context")
         }
@@ -45,12 +52,18 @@ export default class TransactionManager {
      *
      * @param callback Callback to invoke once the transaction is created.
      */
-    async beginTransaction(callback: () => void) {
-        await this.transactions.runPromise(async () => {
+    beginTransaction(callback: () => void) {
+        this.transactions.run(async () => {
             if (!this.hasTransaction) {
-                let transactionProvider = dataSource.transactionProvider()
-                let trx = await transactionProvider()
-                this.transactions.set(CURRENT_TRANSACTION, trx)
+                let id = uuid()
+                debug("no transaction found, creating transaction with id ", id)
+
+                let trx = await this.dataSource.beginTransaction()
+
+                this.transactions.set(CURRENT_TRANSACTION, {
+                    id: id,
+                    trx: trx
+                })
             }
             return callback()
         })
@@ -61,7 +74,7 @@ export default class TransactionManager {
     commit() {
         let trx = this.current()
         trx.commit()
-        this.transactions.set(CURRENT_TRANSACTION, null)
+        this.transactions.set(CURRENT_TRANSACTION, undefined)
     }
 
     /** Rollbacks the current transaction.
@@ -69,6 +82,6 @@ export default class TransactionManager {
     rollback() {
         let trx = this.current()
         trx.rollback()
-        this.transactions.set(CURRENT_TRANSACTION, null)
+        this.transactions.set(CURRENT_TRANSACTION, undefined)
     }
 }

@@ -11,10 +11,10 @@ import {database} from "./knexfile"
 import WebApplication from "./WebApplication"
 
 // Data access
-export const bookDAO = new BookDAO()
-export const personDAO = new PersonDAO()
 export const dataSource = new DataSource(database)
-export const transactionManager = new TransactionManager()
+export const transactionManager = new TransactionManager(dataSource)
+export const bookDAO = new BookDAO(transactionManager)
+export const personDAO = new PersonDAO(transactionManager)
 
 // Application layer
 export const homeController = new HomeController()

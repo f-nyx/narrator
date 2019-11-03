@@ -1,7 +1,7 @@
 import * as Knex from "knex"
 import {Config} from "knex"
 import * as debugFactory from "debug"
-import {Model} from "objection"
+import {Model, transaction, Transaction} from "objection"
 import BookModel from "../domain/persistence/BookModel"
 import PersonModel from "../domain/persistence/PersonModel"
 
@@ -45,7 +45,10 @@ export default class DataSource {
         await this.knex.destroy()
     }
 
-    transactionProvider(): () => Promise<Knex.Transaction> {
-        return this.knex.transactionProvider()
+    /** Begins a transaction and returns the transaction object.
+     * @return a promise to the transaction object.
+     */
+    async beginTransaction(): Promise<Transaction> {
+        return await transaction.start(this.knex)
     }
 }

@@ -77,7 +77,7 @@ export default class BaseModel extends Plugins(Model) {
      * @return the processed entity.
      */
     static async saveOrUpdate<T extends Entity>(entity: T): Promise<T> {
-        let trx = await transactionManager.current()
+        let trx = transactionManager.current()
         let existingEntity: BaseModel = await this.query(trx)
             .findById(entity.id)
             .first()

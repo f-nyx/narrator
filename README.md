@@ -72,8 +72,8 @@ global state in the same asynchronous call chain. [cls-hooked](https://github.co
 that uses different strategies provided by Node for this purpose. The
 [TransactionManager](https://github.com/f-nyx/narrator/blob/master/src/main/support/persistence/TransactionManager.ts)
 uses *cls-hooked* to begin a transaction and keep it among the asynchronous call chain. The
-[TransactionMiddleware](https://github.com/f-nyx/narrator/blob/master/src/main/application/TransactionMiddleware.ts)
-hooks all requests to implement the transaction-per-request pattern.
+[WebTransactionSupport](https://github.com/f-nyx/narrator/blob/master/src/main/application/WebTransactionSupport.ts)
+utility wraps all request handlers to implement the transaction-per-request pattern.
 
 ### Application context
 
