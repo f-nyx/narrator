@@ -87,6 +87,17 @@ Finally to put it all together, the application
 to initialize the [DataSource](https://github.com/f-nyx/narrator/blob/master/src/main/config/DataSource.ts) and
 to start the [WebApplication](https://github.com/f-nyx/narrator/blob/master/src/main/config/WebApplication.ts).
 
+### A word about cls-hooked performance
+
+*cls-hooked* uses [async hooks](https://nodejs.org/api/async_hooks.html) since Node version 8. This feature is still
+in *experimental* phase so it is a risk for using in production. Some performance issues were reported in 2017, but I
+didn't found performance issues since Node v10. I wrote a small
+[performance test](https://github.com/f-nyx/narrator/blob/master/src/test/application/PerformanceProfile.ts) that uses
+[loadTest](https://www.npmjs.com/package/loadtest) to measure the response time from an Express server using
+*cls-hooked*. Both tests with and without *cls-hooked* report similar response times and RPMs. Of course, it should be
+tested in different architectures and system set ups, but I strongly suspect that there's no performance impact by
+using *cls-hooked*.
+
 ### TODO
 
 * Configuration by environment
