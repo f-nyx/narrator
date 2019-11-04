@@ -12,3 +12,15 @@ services:
       - ./.mariadb-dev:/var/lib/mysql
     ports:
       - 3306:3306
+
+  mongodb:
+    image: "mongo:4.0-xenial"
+    restart: unless-stopped
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME
+      - MONGO_INITDB_ROOT_PASSWORD
+      - MONGO_INITDB_DATABASE
+    volumes:
+      - ./.mongodb-dev:/data/db
+    ports:
+      - 27017:27017

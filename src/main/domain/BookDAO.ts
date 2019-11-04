@@ -7,16 +7,20 @@ export default class BookDAO {
     constructor(private readonly transactionManager: TransactionManager) { }
 
     async saveOrUpdate(book: Book): Promise<Book> {
-        await BookModel.saveOrUpdate(book)
-        return book
+        let bookModel = await BookModel.findOneAndUpdate({
+            _id: book.id
+        }, BookModel.new(book), {
+            upsert: true,
+            new: true
+        }).populate("author")
+
+        return Book.from(bookModel)
     }
 
     async findById(id: string): Promise<Book> {
         let bookModel = await BookModel
-            .query(this.transactionManager.current())
             .findById(id)
-            .joinEager("author")
-            .first()
-        return Book.from(bookModel.toJSON())
+            .populate("author")
+        return Book.from(bookModel)
     }
 }

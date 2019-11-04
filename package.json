@@ -16,8 +16,11 @@
   "license": "GPL-2.0",
   "devDependencies": {
     "@types/mocha": "^5.2.7",
+    "@types/mongoose": "^5.5.28",
     "@types/node": "^12.11.7",
     "@typescript-eslint/parser": "^2.5.0",
+    "@types/cls-hooked": "^4.3.0",
+    "@types/express": "^4.17.1",
     "eslint": "^6.6.0",
     "loadtest": "^3.0.9",
     "mocha": "^6.2.2",
@@ -26,15 +29,10 @@
     "typescript": "^3.6.4"
   },
   "dependencies": {
-    "@types/cls-hooked": "^4.3.0",
-    "@types/express": "^4.17.1",
     "cls-hooked": "^4.2.2",
     "debug": "^4.1.1",
     "express": "^4.17.1",
-    "knex": "^0.20.0",
-    "mysql2": "^2.0.0",
-    "objection": "^1.6.11",
-    "objection-guid": "^3.0.2",
+    "mongoose": "^5.7.7",
     "uuid": "^3.3.3"
   },
   "typings": ""

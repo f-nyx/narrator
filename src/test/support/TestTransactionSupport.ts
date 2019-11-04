@@ -1,9 +1,7 @@
 import {dataSource, transactionManager} from "../../main/config/ApplicationContext"
-import {database} from "../../main/config/knexfile"
+import {database} from "../../main/config/database"
 
 before(async function() {
-    database.pool.min = 1
-    database.pool.max = 1
     await dataSource.initialize(database)
 })
 after(async function() {

@@ -4,7 +4,7 @@ import {Express} from "express"
 import {Http2Server} from "http2"
 import withTransaction from "../../main/application/WebTransactionSupport"
 import * as loadTest from "loadtest"
-import {database} from "../../main/config/knexfile"
+import {database} from "../../main/config/database"
 import {createNamespace, Namespace} from "cls-hooked"
 
 let app: Express
@@ -15,8 +15,6 @@ describe("Express.js", function() {
     before(async function () {
         const transactions: Namespace = createNamespace("test")
 
-        database.pool.min = 10
-        database.pool.max = 25
         await dataSource.initialize(database)
 
         app = express()

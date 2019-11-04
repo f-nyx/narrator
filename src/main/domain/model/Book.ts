@@ -25,7 +25,7 @@ export default class Book implements Entity {
      * @return the new created book.
      */
     static from(entity: object): Book {
-        return new Book(entity["id"], entity["title"], entity["author"])
+        return new Book(entity["id"], entity["title"], Person.from(entity["author"]))
     }
 
     /** Creates a new book.

@@ -6,11 +6,8 @@ import {runInTransaction} from "../support/TestTransactionSupport"
 describe("PersonDAO", function() {
     describe("#saveOrUpdate()", function() {
         it("should create a person", runInTransaction(async function() {
-            let author: Person = Person.new("Douglas", "Adams")
-
-            await personDAO.saveOrUpdate(author)
+            let author: Person = await personDAO.saveOrUpdate(Person.new("Douglas", "Adams"))
             let savedPerson: Person = await personDAO.findById(author.id)
-
             assert.deepEqual(savedPerson, author)
         }))
     })

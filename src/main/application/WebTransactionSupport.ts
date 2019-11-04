@@ -16,12 +16,12 @@ export default function withTransaction(callback: Function): (Request, Response,
                 try {
                     debug("transaction successfully acquired")
                     await callback(req, res)
-                    transactionManager.commit()
+                    await transactionManager.commit()
                     debug("transaction successfully committed")
                     next()
                 } catch (cause) {
                     debug("exception found, rolling back transaction")
-                    transactionManager.rollback()
+                    await transactionManager.rollback()
                     debug("transaction rollback succeeded")
                     next(cause)
                 }

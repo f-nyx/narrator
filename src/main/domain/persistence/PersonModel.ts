@@ -1,42 +1,22 @@
-import * as Knex from "knex"
-import Entity from "../../support/persistence/Entity"
-import BaseModel from "../../support/persistence/BaseModel"
+import * as mongoose from "mongoose"
+import {Document, Schema} from "mongoose"
 import Person from "../model/Person"
 
-/** Represents a person data model.
- */
-export default class PersonModel extends BaseModel {
+export const PersonSchema = new Schema({
+    _id: { type: String, required: true, unique: true },
+    firstName: { type: String, required: true },
+    lastName: { type: String, required: true }
+})
 
-    protected static create(entity: Entity): object {
-        let person: Person = entity as Person
-        return {
-            id: person.id,
-            firstName: person.firstName,
-            lastName: person.lastName
-        }
-    }
+interface PersonModel extends Document {
+    firstName: string
+    lastName: string
+}
 
-    static get tableName(): string {
-        return "persons"
-    }
-
-    static get jsonSchema() {
-        return {
-            type: "object",
-            required: ["id", "firstName", "lastName"],
-            properties: {
-                id: { type: "string", length: 36 },
-                firstName: { type: "string", minLength: 1, maxLength: 255 },
-                lastName: { type: "string", minLength: 1, maxLength: 255 }
-            }
-        }
-    }
-
-    protected static async createTable(knex: Knex): Promise<any> {
-        await knex.schema.createTable(this.tableName, table => {
-            table.string("id", 36).primary()
-            table.string("first_name").notNullable()
-            table.string("last_name").notNullable()
+export default Object.assign(mongoose.model<PersonModel>("Person", PersonSchema), {
+    new(person: Person) {
+        return Object.assign({}, person, {
+            _id: person.id
         })
     }
-}
+})

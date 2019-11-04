@@ -1,9 +1,7 @@
-import * as Knex from "knex"
-import {Config} from "knex"
+import * as mongoose from "mongoose"
+import {ClientSession} from "mongoose"
 import * as debugFactory from "debug"
-import {Model, transaction, Transaction} from "objection"
-import BookModel from "../domain/persistence/BookModel"
-import PersonModel from "../domain/persistence/PersonModel"
+import DataSourceConfig from "./DataSourceConfig"
 
 const debug = debugFactory("dataSource")
 
@@ -11,44 +9,39 @@ const debug = debugFactory("dataSource")
  */
 export default class DataSource {
 
-    private readonly createTableFunctions: Array<Function> = [
-        PersonModel.createTableIfRequired.bind(PersonModel),
-        BookModel.createTableIfRequired.bind(BookModel)
-    ]
-
-    private knex: Knex
-
     /** Creates a new data source and sets the connection configuration.
      * @param config Knex configuration.
      */
-    constructor(protected readonly config: Config) { }
+    constructor(protected readonly config: DataSourceConfig) { }
 
     /** Initializes Knex, Objective, and create missing tables from
      * application models.
      */
-    async initialize(config?: Config) {
-        debug("initializing knex")
-        this.knex = Knex(config || this.config)
-        Model.knex(this.knex)
-
-        debug("creating tables if required")
-
-        for (let createTableIfRequired of this.createTableFunctions) {
-            await createTableIfRequired()
-        }
+    async initialize(config?: DataSourceConfig) {
+        debug("initializing mongoose")
+        let resolvedConfig = config || this.config
+        await mongoose.connect(resolvedConfig.url, {
+            useNewUrlParser: true,
+            user: config.user,
+            pass: config.password,
+            keepAlive: true,
+            autoReconnect: true
+        })
     }
 
     /** Shut downs data source.
      */
     async destroy() {
         debug("destroying data source")
-        await this.knex.destroy()
+        await mongoose.connection.close()
     }
 
     /** Begins a transaction and returns the transaction object.
      * @return a promise to the transaction object.
      */
-    async beginTransaction(): Promise<Transaction> {
-        return await transaction.start(this.knex)
+    async beginTransaction(): Promise<ClientSession> {
+        let session = await mongoose.startSession()
+        session.startTransaction()
+        return session
     }
 }

@@ -1,5 +1,5 @@
 import {createNamespace, Namespace} from "cls-hooked"
-import {Transaction} from "knex"
+import {ClientSession} from "mongoose"
 import * as debugFactory from "debug"
 import * as uuid from "uuid/v4"
 import DataSource from "../../config/DataSource"
@@ -26,7 +26,7 @@ export default class TransactionManager {
     /** Returns the active transaction for the current async context.
      * @return a promise to the active transaction.
      */
-    current(): Transaction<any, any> {
+    current(): ClientSession {
         if (this.hasTransaction) {
             let wrapper = this.transactions.get(CURRENT_TRANSACTION)
             debug("using transaction ", wrapper.id)
@@ -71,17 +71,19 @@ export default class TransactionManager {
 
     /** Commits the current transaction. Once committed, the transaction is no longer valid.
      */
-    commit() {
+    async commit() {
         let trx = this.current()
-        trx.commit()
+        await trx.commitTransaction()
+        trx.endSession()
         this.transactions.set(CURRENT_TRANSACTION, undefined)
     }
 
     /** Rollbacks the current transaction.
      */
-    rollback() {
+    async rollback() {
         let trx = this.current()
-        trx.rollback()
+        await trx.abortTransaction()
+        trx.endSession()
         this.transactions.set(CURRENT_TRANSACTION, undefined)
     }
 }

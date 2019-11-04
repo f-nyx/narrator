@@ -7,7 +7,7 @@ import BookDAO from "../domain/BookDAO"
 import PersonDAO from "../domain/PersonDAO"
 import TransactionManager from "../support/persistence/TransactionManager"
 import DataSource from "./DataSource"
-import {database} from "./knexfile"
+import {database} from "./database"
 import WebApplication from "./WebApplication"
 
 // Data access
