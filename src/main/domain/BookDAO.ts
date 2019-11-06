@@ -1,10 +1,25 @@
 import Book from "./model/Book"
 import BookModel from "./persistence/BookModel"
-import TransactionManager from "../support/persistence/TransactionManager"
+import {Service} from "feathers-mongoose"
 
-export default class BookDAO {
+export default class BookDAO extends Service {
 
-    constructor(private readonly transactionManager: TransactionManager) { }
+    constructor() {
+        super({
+            Model: BookModel
+        })
+    }
+
+    async create(book: Book): Promise<Book> {
+        return await this.saveOrUpdate(book)
+    }
+
+    async update(
+        id: string,
+        book: Book
+    ): Promise<Book> {
+        return await this.saveOrUpdate(book)
+    }
 
     async saveOrUpdate(book: Book): Promise<Book> {
         let bookModel = await BookModel.findOneAndUpdate({
@@ -22,5 +37,15 @@ export default class BookDAO {
             .findById(id)
             .populate("author")
         return Book.from(bookModel)
+    }
+
+    async listAll(): Promise<Array<Book>> {
+        let books = await BookModel
+            .find()
+            .populate("author")
+
+        return books.map(bookModel =>
+            Book.from(bookModel)
+        )
     }
 }

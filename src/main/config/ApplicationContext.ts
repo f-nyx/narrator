@@ -9,13 +9,15 @@ import TransactionManager from "../support/persistence/TransactionManager"
 import DataSource from "./DataSource"
 import {database} from "./database"
 import WebApplication from "./WebApplication"
+import BookController from "../application/BookController"
 
 // Data access
 export const dataSource = new DataSource(database)
 export const transactionManager = new TransactionManager(dataSource)
-export const bookDAO = new BookDAO(transactionManager)
+export const bookDAO = new BookDAO()
 export const personDAO = new PersonDAO(transactionManager)
 
 // Application layer
 export const homeController = new HomeController()
+export const bookController = new BookController()
 export const webApplication = new WebApplication()

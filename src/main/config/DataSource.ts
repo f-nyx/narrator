@@ -22,8 +22,8 @@ export default class DataSource {
         let resolvedConfig = config || this.config
         await mongoose.connect(resolvedConfig.url, {
             useNewUrlParser: true,
-            user: config.user,
-            pass: config.password,
+            user: resolvedConfig.user,
+            pass: resolvedConfig.password,
             keepAlive: true,
             autoReconnect: true
         })
