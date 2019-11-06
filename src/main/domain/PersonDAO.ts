@@ -1,10 +1,7 @@
 import Person from "./model/Person"
 import PersonModel from "./persistence/PersonModel"
-import TransactionManager from "../support/persistence/TransactionManager"
 
 export default class PersonDAO {
-
-    constructor(private readonly transactionManager: TransactionManager) { }
 
     async saveOrUpdate(person: Person): Promise<Person> {
         let personModel = await PersonModel.findOneAndUpdate({
@@ -20,5 +17,14 @@ export default class PersonDAO {
     async findById(id: string): Promise<Person> {
         let personModel = await PersonModel.findById(id)
         return Person.from(personModel)
+    }
+
+    async listAll(): Promise<Array<Person>> {
+        let people = await PersonModel
+            .find()
+
+        return people.map(personModel =>
+            Person.from(personModel)
+        )
     }
 }

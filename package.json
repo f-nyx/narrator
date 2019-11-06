@@ -33,6 +33,7 @@
     "@feathersjs/feathers": "^4.3.10",
     "@feathersjs/transport-commons": "^4.3.10",
     "cls-hooked": "^4.2.2",
+    "cors": "^2.8.5",
     "debug": "^4.1.1",
     "express": "^4.17.1",
     "feathers-mongoose": "^8.1.0",

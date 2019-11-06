@@ -39,9 +39,17 @@ export default class BookDAO extends Service {
         return Book.from(bookModel)
     }
 
-    async listAll(): Promise<Array<Book>> {
+    async listAll(authorId?: string): Promise<Array<Book>> {
+        let params = undefined
+
+        if (authorId) {
+            params = {
+                author: authorId
+            }
+        }
+
         let books = await BookModel
-            .find()
+            .find(params)
             .populate("author")
 
         return books.map(bookModel =>
