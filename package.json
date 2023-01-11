@@ -31,7 +31,7 @@
     "cls-hooked": "^4.2.2",
     "debug": "^4.1.1",
     "express": "^4.17.1",
-    "knex": "^0.20.0",
+    "knex": "^2.4.0",
     "mysql2": "^2.0.0",
     "objection": "^1.6.11",
     "objection-guid": "^3.0.2",
